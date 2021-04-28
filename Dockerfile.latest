@@ -1,6 +1,7 @@
 FROM python:3.6-buster
 
-RUN mkdir -p /opencanary
+
+RUN mkdir -p /opencanary/logs
 
 COPY bin /opencanary/bin
 COPY data /opencanary/data
@@ -9,8 +10,10 @@ COPY docs /opencanary/docs
 COPY LICENSE /opencanary/LICENSE
 COPY requirements.txt /opencanary/requirements.txt
 COPY setup.py /opencanary/setup.py
-
+# COPY data/.opencanary.docker.conf /etc/opencanaryd/opencanary.conf
+COPY opencanary.conf /etc/opencanaryd/opencanary.conf
 WORKDIR /opencanary
-
+RUN apt-get update
+RUN apt-get install -y iptables libxtables12
 RUN pip install -r requirements.txt
 
