@@ -2,6 +2,9 @@ FROM python:3.6-buster
 
 
 RUN mkdir -p /opencanary/logs
+RUN apt-get update && apt-get install -y iptables
+RUN update-alternatives --set iptables /usr/sbin/iptables-legacy && \
+    update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 
 COPY bin /opencanary/bin
 COPY data /opencanary/data
@@ -13,7 +16,5 @@ COPY setup.py /opencanary/setup.py
 # COPY data/.opencanary.docker.conf /etc/opencanaryd/opencanary.conf
 COPY opencanary.conf /etc/opencanaryd/opencanary.conf
 WORKDIR /opencanary
-RUN apt-get update
-RUN apt-get install -y iptables libxtables12
 RUN pip install -r requirements.txt
 
