@@ -170,7 +170,9 @@ For other syslog implementations similar lines might work.
 Docker
 ----------------
 
-To build the latest Docker image (based on the code on a given branch) run:
+To build the latest (from source) Docker image (based on the code on a given branch) run:
+
+* Please have a config copy (your own) of the opencanary.conf in the top level directory of the repo/source dir. 
 
 ```bash
 docker build -t opencanary -f Dockerfile.latest .
@@ -181,3 +183,10 @@ To build a Docker image based on what has been released in Pypi, run:
 ```bash
 docker build -t opencanary -f Dockerfile.stable .
 ```
+
+# Notes on docker and opencancary features
+The portscan feature will not work from inside a docker container currently. There are 2 reasons for this
+* The need to run --privileged mode to allow changes to iptables. The docker container needs to reach host resources
+* The docker daemon manages ufw and iptables rules. A possible solution is to run iptables on the host and add to the DOCKER-USER iptables
+
+This will be a bigger problem in Kubernetes as the Kubernetes cluster manages firewall rules via kubelet on the hosts.
